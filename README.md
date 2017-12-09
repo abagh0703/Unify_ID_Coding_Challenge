@@ -1,6 +1,7 @@
 # Unify ID Coding Challenge
 Coding challenge for Unfiy ID.
 Required to create an RGB bitmap picture using random numbers from Random.org.
+![Screenshot of the site](screenshot.PNG?raw=true "Optional Title")
 ## Running The Server
     npm install
 will install all required dependencies. You only need to do this once.
@@ -30,8 +31,6 @@ bits the server's IP has left. If there are enough bits left, it proceeds with t
 ##### Error Checking
 There are multiple error messages that the server may send back to the client. The client displays the error messages
 in large red text on the page.
-![Screenshot of the site](screenshot.PNG?raw=true "Optional Title")
-
 ## And more! Feel free to jump into the source code!
 All the back-end code was done in app.js, and all the front-end code is in 
 public/index.html and public/stylesheets/style.css.
