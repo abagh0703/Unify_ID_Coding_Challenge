@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Aram's Unify ID Coding Challenge</title>
+    <link rel="stylesheet" href="stylesheets/style.css" type="text/css">
+</head>
+
+<body>
+<p class="headline">Enter the dimensions for your random image</p>
+<p class="subtitle">If the value is greater than 128, the image may not load due to quota restrictions.</p>
+<p class="headline" style="display:none;margin-top:20px;font-size:30px;" id="loading">Loading Image...</p>
+<form style="text-align: center;">
+    <ul class="form-style-1">
+        <li>
+            <label>Image Width<span class="required"> *</span></label>
+            <input id="width" type="number" class="required form-style-1" value="128">
+        </li>
+        <li>
+            <label>Image Height<span class="required"> *</span></label>
+            <input id="height" type="number" class="required form-style-1" value="128">
+        </li>
+    </ul>
+    <div id="submitDiv">
+        <input type="submit" value="Submit">
+    </div>
+</form>
+<canvas id="randomRGB">
+    Your browser does not support HTML5 Canvas.
+</canvas>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+
+    var canvas = document.getElementById('randomRGB');
+    var ctx = canvas.getContext('2d');
+    var $loading = $("#loading");
+    var height, width;
+    ctx.fillRect(0, 0, height, width);
+    //Use .ajax instead of .get because of its error function
+    $("form").submit(function (event) {
+        //get height and width from inputs
+        height = $("#height").val();
+        width = $("#width").val();
+        /** check if the fields are empty; set defaults value if they are, parses them otherwise
+         *  used == instead of === because we want null, 0, and "" to evaluate to true
+         */
+        height = (height == "" ? 5 : parseInt(height));
+        width = (width == "" ? 5 : parseInt(width));
+        event.preventDefault();
+        $loading.show().removeClass("error");
+        $.ajax({
+            url: '/getRandomPixels',
+            type: 'POST',
+            data: {
+                height: height,
+                width: width
+            },
+            dataType: "json",
+            success: function (data) {
+                var imageData = ctx.getImageData(0, 0, height, width);
+                for (var i = 0; i < data.length / 3; i++) {
+                    //do i*4 since each pixel set in imageData has 4 values (RGBA)
+                    imageData.data[i * 4] = data[i * 3];    //R
+                    imageData.data[i * 4 + 1] = data[i * 3 + 1];    //G
+                    imageData.data[i * 4 + 2] = data[i * 3 + 2];    //B
+                    imageData.data[i * 4 + 3] = 255;    //A, alpha value, can be constant and still get random RGB
+                }
+                ctx.putImageData(imageData, ctx.canvas.width / 2 - width / 2, 0);
+
+                //remove the loading symbol
+                $loading.hide();
+            },
+            error: function (data) {
+                $loading.html("Error code " + data.status + ": " + data.statusText + ". <br>Please try reloading the page.")
+                    .addClass("error");
+            }
+        });
+    });
+</script>
+</body>
+</html>
