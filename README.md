@@ -1,6 +1,10 @@
 # Unify ID Coding Challenge
-Coding challenge for Unfiy ID.
-Required to create an RGB bitmap picture using random numbers from Random.org.
+Coding challenge for Unfiy ID. Required to create an RGB bitmap picture using random numbers from Random.org.
+
+**Note that Unify ID instructed me to make this public.** 
+\
+\
+\
 ![Screenshot of the site](screenshot.PNG?raw=true "Optional Title")
 ## Running The Server
     npm install
